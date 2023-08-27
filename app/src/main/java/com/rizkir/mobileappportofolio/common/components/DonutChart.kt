@@ -3,6 +3,7 @@ package com.rizkir.mobileappportofolio.common.components
 import android.graphics.Typeface
 import android.text.TextUtils
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -51,17 +52,11 @@ fun DonutChart(modifier: Modifier = Modifier) {
         )
 
 
-    Column {
-        Legends(
-            legendsConfig = DataUtils.getLegendsConfigFromPieChartData(
-                pieChartData,
-                3
-            )
-        )
+    Column(modifier = modifier) {
         PieChart(
             modifier = modifier
                 .fillMaxWidth()
-                .height(500.dp),
+                .height(250.dp),
             pieChartData,
             pieChartConfig
         ) {

@@ -6,6 +6,6 @@ import com.rizkir.mobileappportofolio.domain.entities.LineChartDataEntity
 import kotlinx.coroutines.flow.Flow
 
 interface PortfolioRepository {
-suspend fun getDonutChartData(typeChart: String): Flow<Resource<DonutChartDataEntity>>
+suspend fun getDonutChartData(typeChart: String): Flow<Resource<List<DonutChartDataEntity>>>
 suspend fun getLineChartData(typeChart: String): Flow<Resource<LineChartDataEntity>>
 }

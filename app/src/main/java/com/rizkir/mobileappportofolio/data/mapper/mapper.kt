@@ -11,13 +11,25 @@ import com.rizkir.mobileappportofolio.domain.entities.LineChartDataEntity
 
 fun ChartData.toEntity() = ChartDataEntity(
     type = type,
-    data = data
+    undefinedData = data
 )
 
-fun ChartDataEntity.toDto() = ChartData(
-    type = type,
-    data = data
-)
+fun LinkedHashMap<*, *>.toDonutChartDataEntity(): DonutChartDataEntity {
+    val label = this["label"] as? String ?: ""
+    val percentage = this["percentage"] as? String ?: ""
+    val data = this["data"] as? List<LinkedHashMap<*, *>>
+
+    val dataEntries = data?.map {
+        val trxDate = it["trx_date"] as? String ?: ""
+        val nominal = (it["nominal"] as? Int) ?: 0
+        // Create and return a DataEntry instance
+        ChartDataItem(trxDate, nominal)
+    } ?: emptyList()
+
+    return DonutChartDataEntity(label, percentage, dataEntries)
+}
+
+fun List<ChartDataItem>.mapToChartDataItemEntity() = map { it.toEntity() }
 
 fun DonutChartData.toEntity() = DonutChartDataEntity(
     label = label,
@@ -35,6 +47,8 @@ fun ChartDataItem.toEntity() = ChartDataItemEntity(
     trxDate = trxDate,
     nominal = nominal
 )
+
+fun List<ChartDataItemEntity>.mapToChartDataItem() = map { it.toDto() }
 
 fun ChartDataItemEntity.toDto() = ChartDataItem(
     trxDate = trxDate,
