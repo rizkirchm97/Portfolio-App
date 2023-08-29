@@ -1,5 +1,6 @@
 package com.rizkir.mobileappportofolio.data.repositories
 
+import android.util.Log
 import com.rizkir.mobileappportofolio.common.utils.Resource
 import com.rizkir.mobileappportofolio.data.datasources.LocalDataSource
 import com.rizkir.mobileappportofolio.data.mapper.toEntity
@@ -15,15 +16,19 @@ class PortfolioRepositoryImpl @Inject constructor(
 ) : PortfolioRepository {
 
 
-    override suspend fun getDonutChartData(typeChart: String): Flow<Resource<DonutChartDataEntity>> =
+    override suspend fun getDonutChartData(typeChart: String): Flow<Resource<List<DonutChartDataEntity>>> =
         flow {
+
 
             try {
                 val chartData = localDataSource.getChartDataFromAsset("Portfolio.json")
-                    .filter { it.type == typeChart }.map { it.toEntity() }
-                for (i in chartData.indices) {
-                    emit(Resource.Success((chartData[i].data as DonutChartDataEntity)))
-                }
+                    .filter { it.type == typeChart }.map {
+                        it.toEntity()
+                    }
+
+                val result = chartData[0].undefinedData as List<DonutChartDataEntity>
+                emit(Resource.Success(result))
+
             } catch (e: Exception) {
                 emit(Resource.Error(e.message))
             }
@@ -31,16 +36,17 @@ class PortfolioRepositoryImpl @Inject constructor(
 
         }
 
-    override suspend fun getLineChartData(typeChart: String): Flow<Resource<LineChartDataEntity>> = flow {
-        try {
-            val chartData = localDataSource.getChartDataFromAsset("Portfolio.json")
-                .filter { it.type == typeChart }.map { it.toEntity() }
-            for (i in chartData.indices) {
-                emit(Resource.Success((chartData[i].data as LineChartDataEntity)))
+    override suspend fun getLineChartData(typeChart: String): Flow<Resource<LineChartDataEntity>> =
+        flow {
+            try {
+                val chartData = localDataSource.getChartDataFromAsset("Portfolio.json")
+                    .filter { it.type == typeChart }.map { it.toEntity() }
+                for (i in chartData.indices) {
+                    emit(Resource.Success((chartData[i].undefinedData as LineChartDataEntity)))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message))
             }
-        } catch (e: Exception) {
-            emit(Resource.Error(e.message))
         }
-    }
 
 }

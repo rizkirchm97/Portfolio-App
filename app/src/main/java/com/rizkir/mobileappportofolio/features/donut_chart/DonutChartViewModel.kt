@@ -53,6 +53,6 @@ class DonutChartViewModel @Inject constructor(
 
 sealed interface DonutChartUiState {
     object Loading : DonutChartUiState
-    data class Success(val data: DonutChartDataEntity?) : DonutChartUiState
+    data class Success(val data: List<DonutChartDataEntity>?) : DonutChartUiState
     data class Error(val message: String?) : DonutChartUiState
 }

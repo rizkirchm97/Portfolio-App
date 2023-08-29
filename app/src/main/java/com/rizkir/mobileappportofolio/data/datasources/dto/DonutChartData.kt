@@ -9,4 +9,4 @@ data class DonutChartData(
     val percentage: String,
     @field:Json(name = "data")
     val data: List<ChartDataItem>
-)
+): DataContainer

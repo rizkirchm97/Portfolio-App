@@ -31,14 +31,14 @@ class JsonUtil(private val context: Context) {
                 val donutChartDatas = jsonObject.getJSONArray("data")
                 val donutChartData = mutableListOf<DonutChartData>()
 
-                for(item in 0 .. donutChartDatas.length()) {
+                for (item in 0..donutChartDatas.length()) {
                     val dataChartItems = mutableListOf<ChartDataItem>()
 
                     val label = donutChartDatas.getJSONObject(item).getString("label")
                     val percentage = donutChartDatas.getJSONObject(item).getString("percentage")
                     val datas = donutChartDatas.getJSONObject(item).getJSONArray("data")
 
-                   for (i in 0 until datas.length()) {
+                    for (i in 0 until datas.length()) {
                         val trxDate = datas.getJSONObject(i).getString("trx_date")
                         val nominal = datas.getJSONObject(i).getInt("nominal")
                         dataChartItems.add(ChartDataItem(trxDate, nominal))
@@ -53,8 +53,9 @@ class JsonUtil(private val context: Context) {
                 data = jsonObject.getJSONObject("data")
             }
 
-            if (data != null)
-            list.add(ChartData(type, data))
+            if (data != null) {
+                list.add(ChartData(type, data))
+            }
         }
 
         return list
