@@ -8,10 +8,11 @@ import com.squareup.moshi.Types
 object MoshiUtil {
 
     inline fun <reified T> fromJson(json: String, moshi: Moshi): T? {
-        val type = Types.newParameterizedType(T::class.java)
-        val adapter: JsonAdapter<T> = moshi.adapter(type)
+        val typeObject = Types.newParameterizedType(T::class.java)
+        val adapterObject: JsonAdapter<T> = moshi.adapter(typeObject)
+
         return try {
-            adapter.fromJson(json)
+            adapterObject.fromJson(json)
         } catch (e: JsonDataException) {
             e.printStackTrace()
             null
