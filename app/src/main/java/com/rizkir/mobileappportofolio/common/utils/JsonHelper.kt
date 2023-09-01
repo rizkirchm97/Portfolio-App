@@ -7,11 +7,12 @@ import com.rizkir.mobileappportofolio.data.datasources.dto.DonutChartData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
+import javax.inject.Inject
 
 /**
  * created by RIZKI RACHMANUDIN on 28/08/2023
  */
-class JsonUtil(private val context: Context) {
+class JsonHelper @Inject constructor(private val context: Context) {
 
     private suspend fun getJsonDataFromAsset(fileName: String): String {
         return withContext(Dispatchers.IO) {
@@ -31,7 +32,8 @@ class JsonUtil(private val context: Context) {
                 val donutChartDatas = jsonObject.getJSONArray("data")
                 val donutChartData = mutableListOf<DonutChartData>()
 
-                for (item in 0..donutChartDatas.length()) {
+
+                for (item in 0 until donutChartDatas.length()) {
                     val dataChartItems = mutableListOf<ChartDataItem>()
 
                     val label = donutChartDatas.getJSONObject(item).getString("label")

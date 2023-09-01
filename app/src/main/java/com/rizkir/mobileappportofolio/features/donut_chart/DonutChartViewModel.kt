@@ -2,6 +2,8 @@ package com.rizkir.mobileappportofolio.features.donut_chart
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import co.yml.charts.common.model.PlotType
+import co.yml.charts.ui.piechart.models.PieChartData
 import com.rizkir.mobileappportofolio.common.utils.Resource
 import com.rizkir.mobileappportofolio.data.datasources.dto.ChartDataItem
 import com.rizkir.mobileappportofolio.domain.entities.DonutChartDataEntity
@@ -23,7 +25,7 @@ class DonutChartViewModel @Inject constructor(
     val uiState: StateFlow<DonutChartUiState> = uiState(useCase)
         .stateIn(
             viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
+            started = SharingStarted.WhileSubscribed(50_000),
             initialValue = DonutChartUiState.Loading
         )
 
@@ -37,7 +39,28 @@ class DonutChartViewModel @Inject constructor(
                 }
 
                 is Resource.Success -> {
-                    emit(DonutChartUiState.Success(data.data))
+
+                    val result = data.data
+                    val donutDatas = mutableListOf<PieChartData.Slice>()
+
+                    result?.forEach { donutChartEntity ->
+                    donutDatas.add(
+                        PieChartData.Slice()
+                    )
+
+                    }
+
+                    val pieChartData = PieChartData(
+                        slices = donutDatas,
+                        plotType = PlotType.Donut
+                    )
+
+                    emit(DonutChartUiState.Success(
+                        CombineDataHolder(
+                            donutChartEntity = result,
+                            pieChartData = pieChartData
+                        )
+                    ))
                 }
 
                 is Resource.Error -> {
@@ -53,6 +76,10 @@ class DonutChartViewModel @Inject constructor(
 
 sealed interface DonutChartUiState {
     object Loading : DonutChartUiState
-    data class Success(val data: List<DonutChartDataEntity>?) : DonutChartUiState
+    data class Success(val data: CombineDataHolder?) : DonutChartUiState
     data class Error(val message: String?) : DonutChartUiState
 }
+data class CombineDataHolder(
+    val donutChartEntity: List<DonutChartDataEntity>?,
+    val pieChartData: PieChartData
+)

@@ -66,6 +66,11 @@ dependencies {
     implementation(libs.compose.foundation)
     implementation(libs.compose.material)
 
+    // Coroutine
+    implementation(libs.kotlin.coroutine.core)
+    implementation(libs.kotlin.coroutine)
+    testImplementation(libs.kotlin.coroutine.test)
+
     // JUnit
     testImplementation(libs.junit)
     testImplementation(libs.junit.jupiter)

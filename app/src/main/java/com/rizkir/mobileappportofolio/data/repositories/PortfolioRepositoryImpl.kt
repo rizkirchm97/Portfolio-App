@@ -3,6 +3,7 @@ package com.rizkir.mobileappportofolio.data.repositories
 import android.util.Log
 import com.rizkir.mobileappportofolio.common.utils.Resource
 import com.rizkir.mobileappportofolio.data.datasources.LocalDataSource
+import com.rizkir.mobileappportofolio.data.datasources.dto.DonutChartData
 import com.rizkir.mobileappportofolio.data.mapper.toEntity
 import com.rizkir.mobileappportofolio.domain.entities.DonutChartDataEntity
 import com.rizkir.mobileappportofolio.domain.entities.LineChartDataEntity
@@ -21,12 +22,15 @@ class PortfolioRepositoryImpl @Inject constructor(
 
 
             try {
-                val chartData = localDataSource.getChartDataFromAsset("Portfolio.json")
-                    .filter { it.type == typeChart }.map {
-                        it.toEntity()
-                    }
+                val chartData = localDataSource.getChartDataFromAsset(typeChart).map {
+                    it.toEntity()
+                }
 
-                val result = chartData[0].undefinedData as List<DonutChartDataEntity>
+                val result = (chartData[0].undefinedData as List<DonutChartData>)
+                    .map { it.toEntity() }
+                    .also { alsoData ->
+                        alsoData.map { it.data.map { donutChartItem ->
+                            donutChartItem.toEntity() } } }
                 emit(Resource.Success(result))
 
             } catch (e: Exception) {

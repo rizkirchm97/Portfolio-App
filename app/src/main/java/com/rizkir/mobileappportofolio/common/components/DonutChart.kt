@@ -5,21 +5,28 @@ import android.text.TextUtils
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import co.yml.charts.common.components.Legends
 import co.yml.charts.common.model.PlotType
 import co.yml.charts.common.utils.DataUtils
+import co.yml.charts.ui.piechart.charts.DonutPieChart
 import co.yml.charts.ui.piechart.charts.PieChart
 import co.yml.charts.ui.piechart.models.PieChartConfig
 import co.yml.charts.ui.piechart.models.PieChartData
+import com.rizkir.mobileappportofolio.common.utils.ChartUtil
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DonutChart(modifier: Modifier = Modifier) {
     val context = LocalContext.current
@@ -36,29 +43,16 @@ fun DonutChart(modifier: Modifier = Modifier) {
         plotType = PlotType.Donut
     )
 
-    val pieChartConfig =
-        PieChartConfig(
-            labelVisible = true,
-            strokeWidth = 120f,
-            labelColor = Color.Black,
-            activeSliceAlpha = .9f,
-            isEllipsizeEnabled = true,
-            sliceLabelEllipsizeAt = TextUtils.TruncateAt.MIDDLE,
-            labelTypeface = Typeface.defaultFromStyle(Typeface.BOLD),
-            isAnimationEnable = true,
-            showSliceLabels = true,
-            chartPadding = 25,
-            isClickOnSliceEnabled = true,
-        )
+
 
 
     Column(modifier = modifier) {
-        PieChart(
+        DonutPieChart(
             modifier = modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .height(250.dp),
             pieChartData,
-            pieChartConfig
+            ChartUtil.donutChartConfig
         ) {
 
         }
